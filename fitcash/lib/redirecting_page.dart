@@ -1,9 +1,9 @@
-import 'dart:developer';
-
-import 'package:fitcash/presentation/analytics/analytics.dart';
-import 'package:fitcash/presentation/explore/explore.dart';
-import 'package:fitcash/presentation/home/homepage.dart';
-import 'package:fitcash/presentation/profile/profile.dart';
+import 'package:fitcash/utils/assets.dart';
+import 'package:fitcash/view/analytics/analytics.dart';
+import 'package:fitcash/view/expense/expense_page.dart';
+import 'package:fitcash/view/explore/explore.dart';
+import 'package:fitcash/view/home/homepage.dart';
+import 'package:fitcash/view/profile/profile.dart';
 import 'package:fitcash/utils/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -18,44 +18,65 @@ class _RedirectingPageState extends State<RedirectingPage> {
   final List<Widget> _pages = const [
     HomePage(),
     Explore(),
+    Expense(),
     Analytics(),
     Profile(),
+  ];
+  final List<String> icons = [
+    Ficons.summaryIcon,
+    Ficons.fitnessIcon,
+    Ficons.sharingIcon,
+  ];
+  final List<String> activeIcons = [
+    Ficons.summaryIconActive,
+    Ficons.fitnessIconActive,
+    Ficons.sharingIconActive,
   ];
   int _currentPage = 0;
   @override
   Widget build(BuildContext context) {
-    log(_currentPage.toString());
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: fBlack,
-      bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels: true,
-        showUnselectedLabels: false,
-        selectedLabelStyle: const TextStyle(fontSize: 10),
-        backgroundColor: primaryBlack,
-        selectedItemColor: fGreen,
-        unselectedItemColor: fGrey,
-        currentIndex: _currentPage,
-        unselectedLabelStyle: const TextStyle(color: Colors.teal),
-        type: BottomNavigationBarType.fixed,
-        onTap: (ind) {
-          setState(() {
-            _currentPage = ind;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-              activeIcon: Icon(Icons.home),
-              icon: Icon(Icons.home_outlined),
-              label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Explore"),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Analytics"),
-          BottomNavigationBarItem(
-              activeIcon: Icon(Icons.person),
-              icon: Icon(Icons.person_outline),
-              label: "Profile")
+      body: Stack(
+        children: [
+          _pages[_currentPage],
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: 60,
+              width: screenWidth,
+              decoration: BoxDecoration(
+                color: Fcolors.fBlack,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: List.generate(icons.length, (index) {
+                  return Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _currentPage = index;
+                        });
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            _currentPage == index
+                                ? activeIcons[index]
+                                : icons[index],
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
+          ),
         ],
       ),
-      body: _pages[_currentPage],
     );
   }
 }
