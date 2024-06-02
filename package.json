@@ -4,7 +4,8 @@
   "description": "This is an API for FitCash App which is building for my 4th year major project",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./index.js"
+    "start": "nodemon ./index.js",
+    "project": "node --watch index.js"
   },
   "author": "",
   "license": "ISC",

@@ -1,2 +1,2 @@
-resources
-*.env
+node_modules
+.env
